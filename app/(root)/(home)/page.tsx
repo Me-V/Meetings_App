@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex justify-center items-center gap-5 h-[90vh]">
+    <div className="flex justify-center items-center gap-5 h-[90vh] bg-red-700">
       <HomeCards title={"NewMeeting"} />
       <HomeCards title={"Join"} />
       <HomeCards title={"Schedules"} />
