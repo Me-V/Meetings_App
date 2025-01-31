@@ -19,15 +19,34 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import { error } from "console";
+import toast from "react-hot-toast";
+import useMeetingActions from "@/hooks/useMeetingActions";
 
 export function HomeCards(title: { title: string }) {
   const router = useRouter();
   const [meetingLink, setMeetingLink] = React.useState("");
+  
+  const { createInstantMeeting, joinMeeting  } = useMeetingActions();
+
+  function handleJoinMeeting () {
+     
+    const meetingUrl = meetingLink.split('/').pop();
+    
+    if(meetingUrl) joinMeeting(meetingUrl);
+
+    setMeetingLink("");
+  }
+  
+  function handleCreate (){
+
+    createInstantMeeting()
+  }
 
   return (
     <>
       {title.title === "NewMeeting" ? (
-        <Card className="w-[350px] h-[185px] flex items-center justify-center hover:cursor-pointer border hover:border-white border-gray-500">
+        <Card onClick={handleCreate} className="w-[350px] h-[185px] flex items-center justify-center hover:cursor-pointer border hover:border-white border-gray-500">
           <CardHeader>
             <CardTitle>Create New Meeting</CardTitle>
           </CardHeader>
@@ -52,7 +71,7 @@ export function HomeCards(title: { title: string }) {
             </form>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button disabled={!meetingLink.trim()}>Join</Button>
+            <Button onClick={handleJoinMeeting} disabled={!meetingLink.trim()}>Join</Button>
           </CardFooter>
         </Card>
       ) : title.title === "Schedules" || title.title === "Recordings" ? (

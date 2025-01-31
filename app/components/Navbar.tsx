@@ -7,6 +7,7 @@ import {
   LifeBuoy,
   LogOut,
   Mail,
+  Menu,
   MessageSquare,
   Plus,
   PlusCircle,
@@ -35,41 +36,47 @@ import { SignedIn, SignInButton, UserButton } from "@clerk/nextjs";
 import { SignedOut, SignOutButton } from "@clerk/nextjs";
 import { ModeToggle } from "@/components/ui/ModeToggle";
 import InterviewerDashboard from "./InterviewerDashboard";
+import Link from "next/link";
 const Navbar = () => {
   return (
     <div className="flex justify-between items-center py-2 px-4 mx-2 border-b border-gray-200 rounded-lg">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline">LOGO</Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>My Email Address</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
+      <div className="ml-5 space-x-10">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <Menu />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel>My Email Address</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <span>Profile</span>
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <span>Profile</span>
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              <SignOutButton />
+              <DropdownMenuShortcut>signout logo</DropdownMenuShortcut>
             </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <SignOutButton />
-            <DropdownMenuShortcut>signout logo</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <ModeToggle />
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-       <div className="flex items-center gap-5">
-       <SignedIn>
-        <InterviewerDashboard />
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <ModeToggle />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Link href="/">HOME</Link>
+      </div>
+      <div className="flex items-center gap-5">
+        <SignedIn>
+          <InterviewerDashboard />
           <UserButton />
-        </SignedIn> 
+        </SignedIn>
 
         <SignedOut>
-          <SignInButton/>
+          <SignInButton />
         </SignedOut>
       </div>
     </div>
