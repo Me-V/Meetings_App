@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { LayoutListIcon, UsersIcon } from "lucide-react";
+import QuestionsArea from "./QuestionsArea";
 
 const MeetingRoom = () => {
   const router = useRouter();
@@ -43,7 +44,12 @@ const MeetingRoom = () => {
         direction="horizontal"
         className="max-w-screen rounded-lg border md:min-w-[450px] max-h-[88vh]"
       >
-        <ResizablePanel defaultSize={50} minSize={35} maxSize={40} className="flex justify-center relative m-5">
+        <ResizablePanel
+          defaultSize={50}
+          minSize={35}
+          maxSize={40}
+          className="flex justify-center relative m-5"
+        >
           <div className="absolute inset-0 ">
             {layout === "grid" ? <PaginatedGridLayout /> : <SpeakerLayout />}
 
@@ -62,7 +68,6 @@ const MeetingRoom = () => {
           <div className="absolute bottom-1 xm:max-w-5">
             <div className="flex flex-col items-center gap-4">
               <div className="flex bg-gray-900 rounded-2xl items-center gap-2 flex-wrap justify-center px-4">
-
                 <CallControls onLeave={() => router.push("/")} />
 
                 <div className="flex items-center gap-2">
@@ -101,11 +106,7 @@ const MeetingRoom = () => {
         <ResizablePanel defaultSize={50}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={25}>
-              <div className="flex h-full items-center justify-center p-6">
-                <span className="font-semibold">
-                  I don't know about this one
-                </span>
-              </div>
+              <QuestionsArea />
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={75}>
