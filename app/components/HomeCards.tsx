@@ -4,24 +4,13 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useRouter } from "next/navigation";
-import { error } from "console";
-import toast from "react-hot-toast";
 import useMeetingActions from "@/hooks/useMeetingActions";
+import { useRouter } from "next/navigation";
 
 export function HomeCards(title: { title: string }) {
   const router = useRouter();

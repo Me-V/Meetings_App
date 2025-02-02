@@ -1,8 +1,5 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { useUser } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
-import { api } from "./_generated/api";
 
 export const syncUser = mutation({
   args: {

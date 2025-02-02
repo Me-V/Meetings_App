@@ -4,7 +4,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -20,7 +19,9 @@ const QuestionsArea = () => {
     const selected_ques = CODING_QUESTIONS.find((q) => q.id === question)!;
     setQues(selected_ques);
   }
-
+  
+  console.log(lang);
+  
   return (
     <div className="ml-5 mt-5">
       <div className="ml-5 mt-5 flex gap-5">
