@@ -63,10 +63,13 @@ const QuestionsArea = () => {
               </p>
 
               {ques.examples.map((example, id) => (
-                <div className="mt-10 border border-purple-400 p-5 rounded-lg">
-                  <p key={id}>{example.input}</p>
-                  <p key={id}>{example.output}</p>
-                  <p key={id}>{example.explanation}</p>
+                <div
+                  key={id}
+                  className="mt-10 border border-purple-400 p-5 rounded-lg"
+                >
+                  <p>{example.input}</p>
+                  <p>{example.output}</p>
+                  <p>{example.explanation}</p>
                 </div>
               ))}
             </>
@@ -103,10 +106,13 @@ const QuestionsArea = () => {
                 </p>
 
                 {ques.examples.map((example, id) => (
-                  <div className="mt-10 border border-purple-400 p-5 rounded-lg">
-                    <p key={id}>{example.input}</p>
-                    <p key={id}>{example.output}</p>
-                    <p key={id}>{example.explanation}</p>
+                  <div
+                    key={id}
+                    className="mt-10 border border-purple-400 p-5 rounded-lg"
+                  >
+                    <p>{example.input}</p>
+                    <p>{example.output}</p>
+                    <p>{example.explanation}</p>
                   </div>
                 ))}
               </>
