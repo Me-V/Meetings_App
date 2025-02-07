@@ -1,45 +1,49 @@
 import React, { useState } from "react";
 import {
-  Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { Select } from "@radix-ui/react-select";
 import { CODING_QUESTIONS } from "@/constants";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
 const QuestionsArea = () => {
-  const [lang, setLang] = useState<string>("python");
+  const [lang, setLang] = useState<"javascript" | "python" | "java">("python");
   const [ques, setQues] = useState(CODING_QUESTIONS[0]);
+  const [code, setCode] = useState(ques.starterCode[lang]);
+  function handeLanguageChange(value: string) {
+    const newLang = value as "javascript" | "python" | "java";
+    setLang(newLang);
+    setCode(ques.starterCode[newLang]); // Update code when language changes
+  }
 
   function handleQuestionChange(question: string) {
     const selected_ques = CODING_QUESTIONS.find((q) => q.id === question)!;
     setQues(selected_ques);
   }
 
-  console.log(lang);
+  console.log(code);
 
   return (
-    <div className="ml-5 mt-5">
-      <div className="ml-5 mt-5 flex gap-5">
-        <Select onValueChange={(value) => setLang(value)}>
-          <SelectTrigger className="w-[180px]">
+    <div className="">
+      <div className="flex items-center m-3 gap-7">
+        <Select onValueChange={(value) => handeLanguageChange(value)}>
+          <SelectTrigger className="w-[180px] border border-white">
             <SelectValue placeholder="Select a Language" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="Python">Python</SelectItem>
-              <SelectItem value="CPP">CPP</SelectItem>
-              <SelectItem value="Java">Java</SelectItem>
+              <SelectItem value="javascript">javascript</SelectItem>
+              <SelectItem value="python">Python</SelectItem>
+              <SelectItem value="java">Java</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
         <Select onValueChange={(value) => handleQuestionChange(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a Language" />
+          <SelectTrigger className="w-[180px] border border-white">
+            <SelectValue placeholder="Choose Question" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

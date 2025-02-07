@@ -6,6 +6,8 @@ import {
   SpeakerLayout,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
+
+import { CODING_QUESTIONS } from "@/constants";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import {
@@ -21,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { LayoutListIcon, UsersIcon } from "lucide-react";
+import Editor from "@monaco-editor/react";
 import QuestionsArea from "./QuestionsArea";
 
 const MeetingRoom = () => {
@@ -28,8 +31,13 @@ const MeetingRoom = () => {
   const [layout, setLayout] = useState<"grid" | "speaker">("speaker");
   const [showParticipants, setShowParticipants] = useState(false);
   const { useCallCallingState } = useCallStateHooks();
+  const [lang, setLang] = useState<"javascript" | "python" | "java">("python");
+  const [ques, setQues] = useState(CODING_QUESTIONS[0]);
+  const [code, setCode] = useState(ques.starterCode[lang]);
 
   const callingState = useCallCallingState();
+
+  console.log(setLang, setQues);
 
   if (callingState !== CallingState.JOINED) {
     return (
@@ -38,6 +46,7 @@ const MeetingRoom = () => {
       </div>
     );
   }
+
   return (
     <div className="flex justify-center items-center h-[92vh]">
       <ResizablePanelGroup
@@ -111,7 +120,24 @@ const MeetingRoom = () => {
             <ResizableHandle />
             <ResizablePanel defaultSize={75}>
               <div className="flex h-full items-center justify-center p-6">
-                <span className="font-semibold">Code Editor Area</span>
+                //Code Editor Area
+                <Editor
+                  height={"100%"}
+                  language={lang}
+                  theme="vs-dark"
+                  value={code}
+                  onChange={(value) => setCode(value || "")}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 18,
+                    lineNumbers: "on",
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                    padding: { top: 16, bottom: 16 },
+                    wordWrap: "on",
+                    wrappingIndent: "indent",
+                  }}
+                />
               </div>
             </ResizablePanel>
           </ResizablePanelGroup>
