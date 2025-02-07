@@ -120,7 +120,6 @@ const MeetingRoom = () => {
             <ResizableHandle />
             <ResizablePanel defaultSize={75}>
               <div className="flex h-full items-center justify-center p-6">
-                //Code Editor Area
                 <Editor
                   height={"100%"}
                   language={lang}
