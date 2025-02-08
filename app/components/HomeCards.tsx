@@ -34,7 +34,7 @@ export function HomeCards(title: { title: string }) {
 
   return (
     <>
-      {title.title === "NewMeeting" ? (
+      {title.title === "New Meeting" ? (
         <Card onClick={handleCreate} className="w-[350px] h-[185px] flex items-center justify-center hover:cursor-pointer border hover:border-white border-gray-500">
           <CardHeader>
             <CardTitle>Create New Meeting</CardTitle>

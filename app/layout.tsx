@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "@stream-io/video-react-sdk/dist/css/styles.css"; 
+import "@stream-io/video-react-sdk/dist/css/styles.css";
 import "./globals.css";
 import ConvexClerkProvider from "./components/providers/ConvexClerkProvider";
 import { ThemeProvider } from "./components/providers/theme-provider";
@@ -40,12 +40,11 @@ export default function RootLayout({
               <Navbar />
               {children}
             </SignedIn>
-
             <SignedOut>
-              <RedirectToSignIn/>
+              <RedirectToSignIn />
             </SignedOut>
           </ThemeProvider>
-          <Toaster/>
+          <Toaster />
         </body>
       </html>
     </ConvexClerkProvider>

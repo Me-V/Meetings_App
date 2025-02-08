@@ -18,7 +18,7 @@ export const syncUser = mutation({
 
     return await ctx.db.insert("users", {
       ...args,
-      role: "candidate",
+      role: ""
     });
   },
 });
@@ -46,5 +46,26 @@ export const getUserByClerkId = query({
       .first();
 
     return user;
+  },
+});
+
+export const updateRole = mutation({
+  args: {
+    clerkId: v.string(),
+    role: v.union(v.literal("candidate"), v.literal("interviewer")),
+  },
+  handler: async (ctx, args) => {
+    // Find the user by Clerk ID
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .unique();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Update the user's role
+    await ctx.db.patch(user._id, { role: args.role });
   },
 });
