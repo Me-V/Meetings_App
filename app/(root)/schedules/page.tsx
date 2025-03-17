@@ -242,7 +242,7 @@ const ScheduleInterview = () => {
                       <SelectItem value="09:00">09:00 am</SelectItem>
                       <SelectItem value="06:00">06:00 pm</SelectItem>
                       <SelectItem value="08:00">08:00 pm</SelectItem>
-                      <SelectItem value="18:26">18:26 pm</SelectItem>
+                      <SelectItem value="14:36">2:10 pm</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
