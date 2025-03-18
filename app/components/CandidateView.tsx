@@ -18,7 +18,7 @@ const CandidateView = ({ mainId }: { mainId: string }) => {
 
       {mainInterviews.length > 0 &&
         mainInterviews?.map((interview) => (
-          <div className="">
+          <div key={interview._id} className="">
             <ScheduleCard interview={interview} />
           </div>
         ))}
