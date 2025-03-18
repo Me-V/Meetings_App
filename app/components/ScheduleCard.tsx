@@ -1,6 +1,7 @@
+"use client";
 import { Doc } from "@/convex/_generated/dataModel";
 import useMeetingActions from "@/hooks/useMeetingActions";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,10 +11,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 type Interview = Doc<"interviews">;
 
 const ScheduleCard = ({ interview }: { interview: Interview }) => {
+  const deleteInterview = useMutation(
+    api.interviews.deleteInterviewByStreamCallId
+  );
+  const updateStatus = useMutation(api.interviews.toggleInterviewStatus);
+  const [isChecked, setIsChecked] = useState(interview.status === "passed");
+
   const { joinMeeting } = useMeetingActions();
   const now = new Date();
 
@@ -30,30 +40,79 @@ const ScheduleCard = ({ interview }: { interview: Interview }) => {
     meetingStatus = "live";
   }
 
+  const handleDelete = async (streamCallId: string) => {
+    try {
+      const result = await deleteInterview({ streamCallId });
+      console.log(result.message);
+    } catch (error) {
+      console.error("Error deleting interview:", error);
+    }
+  };
+
+  const handleCheckboxChange = async () => {
+    const newCheckedState = !isChecked;
+    setIsChecked(newCheckedState); // Update local state for UI
+
+    try {
+      await updateStatus({
+        streamCallId: interview.streamCallId,
+        isChecked: newCheckedState,
+      });
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
   return (
     <Card className="w-[350px] shadow-md rounded-lg">
       <CardHeader>
-        <CardTitle>{interview.title}</CardTitle>
+        <CardTitle className="flex justify-between">
+          {interview.title}
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="status"
+              checked={isChecked}
+              onCheckedChange={handleCheckboxChange}
+            />
+            <label
+              htmlFor="status"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Passed
+            </label>
+          </div>
+        </CardTitle>
         {interview.description && (
           <CardDescription>{interview.description}</CardDescription>
         )}
       </CardHeader>
       <CardContent>
-        <p>📅 {interview.date} | 🕒 {interview.time}</p>
+        <p>
+          📅 {interview.date} | 🕒 {interview.time}
+        </p>
         <p
           className={`mt-2 px-3 w-24 py-1 text-center text-sm font-medium rounded-md ${
             meetingStatus === "live"
               ? "bg-green-500 text-white"
               : meetingStatus === "upcoming"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-400 text-white"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-400 text-white"
           }`}
         >
           {meetingStatus.charAt(0).toUpperCase() + meetingStatus.slice(1)}
         </p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="destructive">Delete</Button>
+        <Button
+          onClick={() => {
+            handleDelete(interview.streamCallId);
+          }}
+          variant="destructive"
+        >
+          Delete
+        </Button>
+
         <Button
           onClick={() => joinMeeting(interview.streamCallId)}
           disabled={meetingStatus !== "live"}
