@@ -12,12 +12,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
 
 type Interview = Doc<"interviews">;
 
 const ScheduleCard = ({ interview }: { interview: Interview }) => {
+  const { user } = useUser();
+
+  const currUser = useQuery(api.users.getUserByClerkId, {
+    clerkId: user?.id || "",
+  });
+
   const deleteInterview = useMutation(
     api.interviews.deleteInterviewByStreamCallId
   );
@@ -69,19 +76,37 @@ const ScheduleCard = ({ interview }: { interview: Interview }) => {
         <CardTitle className="flex justify-between">
           {interview.title}
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="status"
-              checked={isChecked}
-              onCheckedChange={handleCheckboxChange}
-            />
-            <label
-              htmlFor="status"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Passed
-            </label>
-          </div>
+          {currUser?.role === "interviewer" && (
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="status"
+                checked={isChecked}
+                onCheckedChange={handleCheckboxChange}
+              />
+              <label
+                htmlFor="status"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Passed
+              </label>
+            </div>
+          )}
+
+          {currUser?.role === "candidate" &&
+            meetingStatus !== "upcoming" &&
+            meetingStatus !== "live" && (
+              <>
+                {interview.status === "passed" ? (
+                  <span className="text-sm font-normal text-green-600">
+                    Passed
+                  </span>
+                ) : (
+                  <span className="text-sm font-normal text-red-600">
+                    Failed
+                  </span>
+                )}
+              </>
+            )}
         </CardTitle>
         {interview.description && (
           <CardDescription>{interview.description}</CardDescription>
@@ -104,14 +129,16 @@ const ScheduleCard = ({ interview }: { interview: Interview }) => {
         </p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button
-          onClick={() => {
-            handleDelete(interview.streamCallId);
-          }}
-          variant="destructive"
-        >
-          Delete
-        </Button>
+        {currUser?.role === "interviewer" && (
+          <Button
+            onClick={() => {
+              handleDelete(interview.streamCallId);
+            }}
+            variant="destructive"
+          >
+            Delete
+          </Button>
+        )}
 
         <Button
           onClick={() => joinMeeting(interview.streamCallId)}

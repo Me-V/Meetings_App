@@ -1,5 +1,6 @@
 "use client";
 
+import CandidateView from "@/app/components/CandidateView";
 import { HomeCards } from "@/app/components/HomeCards";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
@@ -8,7 +9,7 @@ import { useMutation, useQuery } from "convex/react";
 export default function Home() {
   const { user } = useUser(); // Get the authenticated user
   const updateRole = useMutation(api.users.updateRole); // Correct way to use the mutation hook
-
+    
   const currUser = useQuery(api.users.getUserByClerkId, {
     clerkId: user?.id || "",
   });
@@ -62,6 +63,10 @@ export default function Home() {
           <HomeCards title={"Schedules"} />
           <HomeCards title={"Recordings"} />
         </div>
+      )}
+
+      {currUser?.role === "candidate" && (
+        <CandidateView mainId={currUser.clerkId} />
       )}
     </>
   );
