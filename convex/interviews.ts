@@ -56,6 +56,7 @@ export const createInterview = mutation({
 
     return await ctx.db.insert("interviews", {
       ...args,
+      status: "failed",
     });
   },
 });
@@ -72,4 +73,44 @@ export const createInterview = mutation({
 //     });
 //   },
 // });
+
+export const deleteInterviewByStreamCallId = mutation({
+  args: { streamCallId: v.string() },
+  handler: async (ctx, { streamCallId }) => {
+    const interview = await ctx.db
+      .query("interviews")
+      .withIndex("by_stream_call_id", (q) => q.eq("streamCallId", streamCallId))
+      .unique();
+
+    if (!interview) {
+      throw new Error("Interview not found");
+    }
+
+    await ctx.db.delete(interview._id);
+
+    return { success: true, message: "Interview deleted successfully" };
+  },
+});
+
+export const toggleInterviewStatus = mutation({
+  args: { streamCallId: v.string(), isChecked: v.boolean() },
+  handler: async (ctx, { streamCallId, isChecked }) => {
+    // Find interview by streamCallId
+    const interview = await ctx.db
+      .query("interviews")
+      .withIndex("by_stream_call_id", (q) => q.eq("streamCallId", streamCallId))
+      .unique();
+
+    if (!interview) {
+      throw new Error("Interview not found");
+    }
+
+    // Update status based on checkbox state
+    const newStatus = isChecked ? "passed" : "failed";
+
+    await ctx.db.patch(interview._id, { status: newStatus });
+
+    return { success: true, message: `Interview marked as ${newStatus}` };
+  },
+});
 
